@@ -7,7 +7,7 @@
 
 `Director.cs`的内容:
 
-``` C#
+```csharp
 
 // DelegateDemo - Director.cs
 // by Wings
@@ -45,7 +45,7 @@ namespace DelegateDemo
 
 `Form1.cs`的内容:
 
-```C#
+```csharp
 
   // DelegateDemo - Form1.cs
   // by Wings
@@ -91,7 +91,7 @@ namespace DelegateDemo
 
 像这样：
 
-```C#
+```csharp
 public Form1()
 {            
     InitializeComponent();
@@ -112,7 +112,7 @@ public Form1()
 
 更改过的`Form1.cs`:
 
-```C#
+```csharp
 
  // DelegateDemo - Form1.cs
  // by Wings
@@ -174,7 +174,7 @@ public Form1()
 
 先从`Invoke()`入手，看源码：
 
-```C#
+```csharp
 public object Invoke(Delegate method, params object[] args)
 {
     using (new Control.MultithreadSafeCallScope())
@@ -184,7 +184,7 @@ public object Invoke(Delegate method, params object[] args)
 
 而`BeginInvoke()`差别仅仅在于`MarshaledInvoke()`的参数是否`synchronous`:
 
-```C#
+```csharp
 public IAsyncResult BeginInvoke(Delegate method, params object[] args)
 {
       using (new Control.MultithreadSafeCallScope())
@@ -202,7 +202,7 @@ Marshaled这个词常写Native Methods的同学一定很熟悉。对应的中文
 
 所以.NET的“暗箱操作”很有可能就在`MarshaledInvoke`里面。我们点进去看一下，当然主要关注NativeMethods
 
-```C#
+```csharp
 private object MarshaledInvoke(Control caller, Delegate method, object[] args, bool synchronous)
     {
       if (!this.IsHandleCreated)
@@ -256,7 +256,7 @@ MSDN文档[^4]：
 
 `InvokeRequired:`
 
-```C#
+```csharp
 [SRDescription("ControlInvokeRequiredDescr")]
 [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 [Browsable(false)]
@@ -389,7 +389,7 @@ public bool InvokeRequired
 
 `Director.cs - Asm`内容：（参考注释）
 
-```ASM
+```Assembly
 --- Director.cs ----------------
  push        ebp  //各种压栈，为后面还原现场
  mov         ebp,esp 
@@ -441,7 +441,7 @@ public bool InvokeRequired
 
 `Director.cs - Asm`内容：
 
-```ASM
+```Assembly
 --- Director.cs ----------------
 //对应_report(counter.ToString(CultureInfo.InvariantCulture));
  nop  //这个非常眼熟的偏移地址02A184B8h值又传送至eax寄存器，这个偏移就是数据段中的函数地址
@@ -467,7 +467,7 @@ public bool InvokeRequired
 
 那就再来看`Form1.cs - Asm`
 
-```ASM
+```Assembly
 // 从这是跳到函数director_OnReport()
  nop
             //int value = Convert.ToInt32(postStatus);
