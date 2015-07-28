@@ -20,7 +20,7 @@ However, everyone makes mistakes: It's not rare, especially for beginners, to le
 
 The following table lists a couple of commonly used git commands, along with corresponding commands to undo or fixup the mess.
 
-Also, the commands are labeled with numbers. The remarks on the commands are also listed below the table.
+Also, the commands are labeled with numbers, the remarks on each command (if any) are listed below the table content.
 
 | No. | **Git Command**  |     **How To Undo**      |
 |-----|------------------|--------------------------|
