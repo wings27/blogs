@@ -1,3 +1,18 @@
+## 目录
+<!-- MarkdownTOC -->
+
+- [跨线程修改控件的问题](#跨线程修改控件的问题)
+- [通过Invoke解决问题](#通过invoke解决问题)
+- [源码分析](#源码分析)
+- [InvokeRequired属性探究](#invokerequired属性探究)
+- [事件委托的工作原理](#事件委托的工作原理)
+- [事件委托的本质](#事件委托的本质)
+- [总结](#总结)
+- [参考文献](#参考文献)
+
+<!-- /MarkdownTOC -->
+
+<a name="跨线程修改控件的问题"></a>
 #### 跨线程修改控件的问题
 相信大家刚开始写winform的时候都遇到过这样的问题，当跨线程修改控件属性时会遇到如下的异常：
 
@@ -108,6 +123,7 @@ public Form1()
 
 二者的差别在于`BeginInvoke()`是异步的，这里为了防止`Director.Test()`执行时主窗体关闭导致句柄失效而产生异常，我们使用`BeginInvoke()`方法进行异步调用。
 
+<a name="通过invoke解决问题"></a>
 #### 通过Invoke解决问题
 
 更改过的`Form1.cs`:
@@ -170,6 +186,7 @@ public Form1()
 
 于是再次发扬Geek精神，尝试剥去.NET粉饰的外衣，窥其真理的内核。
 
+<a name="源码分析"></a>
 #### 源码分析
 
 先从`Invoke()`入手，看源码：
@@ -251,6 +268,7 @@ MSDN文档[^4]：
 
 这也就解释了上述情况发生的原因，调用`Invoke()`而不是直接更改控件值使得主窗体能够将消息加入自身的消息队列中，从而在合适的时间处理消息，这样跨线程更改控件值就转变为窗体线程自己更改控件值，也就是从创建控件的线程（窗体主线程）访问控件，避免了之前的错误。
 
+<a name="invokerequired属性探究"></a>
 #### InvokeRequired属性探究
 还有一个问题，如果本来就是窗体线程对控件进行访问呢，毫无疑问直接设置值即可。在上面的代码中我使用InvokeRequired属性来判断控件更改者是否来自于其他线程，从而决定是调`Invoke()`还是直接改。那么这个属性是否真的如我们所想，仅仅是判断调用者线程呢？看代码：
 
@@ -290,6 +308,7 @@ public bool InvokeRequired
 
 至此，我们已经理解了Invoke的具体实现。
 
+<a name="事件委托的工作原理"></a>
 #### 事件委托的工作原理
 
 下面来看事件委托，为什么`Director.Test()`能够触发`director_OnReport()`回调函数。
@@ -375,6 +394,7 @@ public bool InvokeRequired
 
 这样我们已经基本理清了绑定的实现过程，但是代码在执行时是否如上面所说是“函数在回调绑定完成之后直接被替换”这样呢？想要验证就必须再看MSIL的底层实现，就是汇编啦。
 
+<a name="事件委托的本质"></a>
 #### 事件委托的本质
 
 打开高端大气上档次的反汇编工具，在Director类中设定断点。
@@ -496,6 +516,7 @@ public bool InvokeRequired
 
 我们说CLR是虚拟机，这个“虚拟”仅仅指CLR中的指令并非与物理硬件相关联，但是指令集在虚拟机层面与x86 CPU的指令本质上是相同的。.NET美轮美奂的亭台楼榭都建立在汇编的一砖一瓦之上。而在CLR Assembly层面，只有内核级的概念，这也是我们能够看到其实质的原因。
 
+<a name="总结"></a>
 #### 总结
 
 好啦，总结起来C#的窗体事件本质上与MFC的窗体事件一样，都基于Windows API提供的窗体事件消息循环机制实现（主要实现是窗体消息队列）。
@@ -508,6 +529,7 @@ C#事件委托绑定的回调在实现上就是调用同一函数，可以验证
 
 以及，要养成写博客的好习惯~
 
+<a name="参考文献"></a>
 #### 参考文献
 [^1]: [Race condition - Wikipedia](http://en.wikipedia.org/wiki/Race_condition)
 [^2]: [Control.CheckForIllegalCrossThreadCalls 属性 - MSDN](https://msdn.microsoft.com/zh-cn/library/system.windows.forms.control.checkforillegalcrossthreadcalls%28v=vs.110%29.aspx)
