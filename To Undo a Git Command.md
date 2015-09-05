@@ -3,6 +3,7 @@ It seems I'm not the only one who believes that git commands are poorly designed
 To make things worse, they also provide a human-unreadable documentation as well.[^2]
 So it's very common for beginners to leave a mess in the workspace after running a God-knows-what-it-means git command. Therefore I wrote this blog. Hopefully this could save you from clueless.
 
+## Table of Contents
 <!-- MarkdownTOC -->
 
 - [To Undo a Git Command](#to-undo-a-git-command)
