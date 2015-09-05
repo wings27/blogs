@@ -35,8 +35,7 @@ The commands are labeled with numbers, and the remarks on some of the commands a
 - No.2: Only useful when the commit is not pushed yet. If the commit is already pushed to remote, use `git revert` instead. *Another (not recommanded) way is to add `--force` when performing next `git push`, use with caution![^4]*
 - No.3: To "revert" a commit does not erase the commit in the commit history. Instead, it generates a new commit which reverses the effect of the specified commit. This is usually the recommend way to undo a commit.
 - No.6: **Use with caution!** This may affect other people's work. If you don't know what you are doing, **DON'T** do it.
-
-- 用英文写纯粹是为了好玩 :)
+- 本来用英文写是为了好玩。。后来发现ghost-blog的英文字体渲染真的好漂亮。于是想以后都用英文写了（误。。）
 
 [^1]: [What I Hate About Git | Hacker News](https://news.ycombinator.com/item?id=4340595)
 [^2]: [10 things I hate about Git](http://stevebennett.me/2012/02/24/10-things-i-hate-about-git/)
